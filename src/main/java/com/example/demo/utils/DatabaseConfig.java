@@ -8,6 +8,6 @@ public class DatabaseConfig extends SqlRunner {
      */
     public DatabaseConfig() {
 
-         super("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/course", "root", "123456");
+         super("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/course?autoReconnect=true", "root", "123456");
     }
 }

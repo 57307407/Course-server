@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class Course {
-    private int id;
+    private Integer id;
     private String clientId;
     private String courseId;
-    private int type;
+    private Integer type;
     private String className;
     private String coverUrl;
     private String teacher;

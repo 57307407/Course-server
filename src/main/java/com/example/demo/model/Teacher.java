@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Teacher {
-    private int id;
+    private Integer id;
     private String clientId;
     private String teacherId;
     private String type;

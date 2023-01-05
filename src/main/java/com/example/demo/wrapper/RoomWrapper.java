@@ -10,10 +10,17 @@ import java.util.ArrayList;
 
 @DataRunner(DatabaseConfig.class)
 public interface RoomWrapper {
-    @Select("select * from room")
+    @Select("select * from room ")
     public ArrayList<Room> getRooms() throws SQLException;
+
+    @Select("select * from room where clientId = {0} ")
+    public ArrayList<Room> getRoomsByClientId(int clientId) throws SQLException;
 
     @Select("select * from room where courseId = {0}")
     public ArrayList<Room>  getRoom(String  courseId) throws SQLException;
+
+    @Select("select * from room where courseId = {0} and clientId={1}")
+    public ArrayList<Room>  getRoom1(String  courseId,String  clientId) throws SQLException;
+
 
 }

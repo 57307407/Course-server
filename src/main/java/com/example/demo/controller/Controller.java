@@ -36,13 +36,13 @@ public class Controller {
                                                      @RequestParam Integer isDelete,
                                                      @RequestParam String sort){
         try {
-            ArrayList<Room> rooms = roomwrapper.getRooms();
+            ArrayList<Room> rooms = roomwrapper.getRoomsByClientId(clientId);
             ArrayList<Room> result =null;
             System.out.println();
             rooms.forEach(o->
             {
                 try {
-                    o.setCourseClasss(wrapper.getCourseByid(o.getCourseId()));
+                    o.setCourseClasss(wrapper.getCourseByidAndClientId(o.getCourseId(),clientId));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -62,7 +62,7 @@ public class Controller {
                                                          @RequestParam Integer clientId                                                       ){
 
         try {
-            ArrayList<Teacher> teachers = wrapper.getTeachers();
+            ArrayList<Teacher> teachers = wrapper.getTeachersByClientId(clientId);
             return new TeacherVo(teachers.size(),teachers);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -74,10 +74,10 @@ public class Controller {
 
 
     @GetMapping("/homepages")
-    public Object homepages(){
+    public Object homepages(@RequestParam("clientId.equals") Integer clientId){
 
         try {
-            List<About> abouts = wrapper.getAbouts();
+            List<About> abouts = wrapper.getAboutsByClientId(clientId);
             return abouts;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -87,18 +87,37 @@ public class Controller {
 
 
     @GetMapping("/students")
-    public Object students(@RequestParam("clientId.equals") String clientId){
-
+    public Object students(HttpServletRequest request){
+        String clientId = request.getParameter("clientId.equals");
+        String phone = request.getParameter("phone.equals");
+        String courseId = request.getParameter("courseId.equals");
+        ArrayList<User> user=new ArrayList<>();
+        if (phone!=null){
         try {
-            ArrayList<User> user = wrapper.getUserByclientId(clientId);
+             user = wrapper.getUserByclientIdAndPhone(clientId,phone);
+            if (user.size()==0)
+            {
+                wrapper.addUser(clientId,phone);
+            }
             System.out.println(user);
             return user;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+        }
+        else if (courseId!=null){
+            try {
+                user = wrapper.getUserByclientIdAndCourse(clientId,courseId);
 
+                return user;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else {
+            return user;
         }
     }
-//
     @PostMapping("/students")
     public Object add(@RequestBody UserRequest userRequest){
         User user = new User(userRequest);
@@ -109,35 +128,32 @@ public class Controller {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("/courses")
-    public Object courses(@RequestParam("courseId.equals") String courseId){
-        if (courseId.equals("index.html"))
-        {
+    @GetMapping({"/courses"})
+    public Object courses(@RequestParam("courseId.equals") String courseId,@RequestParam("clientId.equals") String clientId) {
+        ArrayList<Room> room=null;
+        if (courseId.equals("index.html")) {
             try {
-                ArrayList<Room> room = roomwrapper.getRooms();
+                room = roomwrapper.getRooms();
                 return room;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-
+            } catch (SQLException var3) {
+                throw new RuntimeException(var3);
             }
-        }
-        else {
+        } else {
             try {
-                ArrayList<Room> room = roomwrapper.getRoom(courseId);
+                room = roomwrapper.getRoom1(courseId,clientId);
                 return room;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-
+            } catch (SQLException var4) {
+                throw new RuntimeException(var4);
             }
         }
     }
 
     @GetMapping("/course-classes")
-    public Object courseClasses(@RequestParam("courseId.equals") String courseId){
+    public Object courseClasses(@RequestParam("courseId.equals") String courseId,@RequestParam("clientId.equals") Integer clientId){
         if (courseId.equals("index.html"))
         {
             try {
-                ArrayList<Course> courses = wrapper.getCourses();
+                ArrayList<Course> courses = wrapper.getCourseByid(clientId.toString());
                 return courses;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -146,7 +162,7 @@ public class Controller {
         }
         else {
             try {
-                ArrayList<Course> courses = wrapper.getCourseByid(courseId);
+                ArrayList<Course> courses = wrapper.getCourseByidAndClientId(courseId,clientId);
                 return courses;
             } catch (SQLException e) {
                 throw new RuntimeException(e);

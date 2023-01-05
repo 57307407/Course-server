@@ -5,7 +5,7 @@ import lombok.Data;
 import java.sql.Date;
 @Data
 public class Class {
-    private int id;
+    private Integer id;
     private String clientId;
     private String courseId;
     private String type;

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class About {
-    private int id;
+    private Integer id;
     private String clientId;
     private String coverUrl;
     private String title;

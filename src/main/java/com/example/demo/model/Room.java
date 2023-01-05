@@ -8,13 +8,13 @@ public class Room {
     private ArrayList<Course> courseClasss;
     private String clientName;
     private String domain;
-    private int id;
+    private Integer id;
     private String clientId;
     private String courseId;
     private String title;
-    private int type;
+    private Integer type;
     private String typeId;
-    private int isSpecail;
+    private Integer isSpecail;
     private String coverUrl;
     private String teacher;
     private String startAt;
@@ -28,14 +28,14 @@ public class Room {
     private String updatedAt;
     private String roomId;
     private String status;
-    private int isDelete;
-    private int courseIndex;
-    private int oldPrice;
-    private int ishd;
+    private Integer isDelete;
+    private Integer courseIndex;
+    private Integer oldPrice;
+    private Integer ishd;
     private String summary;
     private String showqr;
     private String introduction;
     private String linkUrl;
     private String gradeLevel;
-    private int applyCount;
+    private Integer applyCount;
 }
